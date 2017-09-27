@@ -31,20 +31,6 @@
           })
         })
       });
-
-      /*
-      var vectorLayer = new ol.layer.Vector({
-        source: new ol.source.Vector({
-          url: 'https://openlayers.org/en/v4.3.4/examples/data/geojson/countries.geojson',
-          format: new ol.format.GeoJSON()
-        }),
-        style: function(feature, resolution) {
-          style.getText().setText(resolution < 5000 ? feature.get('name') : '');
-          return style;
-        }
-      });
-      */
-
       
       var vectorLayer = new ol.layer.Vector({
         source : new ol.source.Vector({
@@ -56,8 +42,6 @@
           }
       });
       
-
-
       var map = new ol.Map({
         layers: [
           new ol.layer.Tile({
@@ -72,85 +56,10 @@
         })
       });
 
-      /*
-      var highlightStyleCache = {};
+      var refreshInteval = 5000; // refresh every 5 seconds
+      setTimeout(updateFeaturesForVectorLayer, refreshInteval);
 
-      var featureOverlay = new ol.layer.Vector({
-        source: new ol.source.Vector(),
-        map: map,
-        style: function(feature, resolution) {
-          var text = resolution < 5000 ? feature.get('name') : '';
-          if (!highlightStyleCache[text]) {
-            highlightStyleCache[text] = new ol.style.Style({
-              stroke: new ol.style.Stroke({
-                color: '#f00',
-                width: 1
-              }),
-              fill: new ol.style.Fill({
-                color: 'rgba(255,0,0,0.1)'
-              }),
-              text: new ol.style.Text({
-                font: '12px Calibri,sans-serif',
-                text: text,
-                fill: new ol.style.Fill({
-                  color: '#000'
-                }),
-                stroke: new ol.style.Stroke({
-                  color: '#f00',
-                  width: 3
-                })
-              })
-            });
-          }
-          return highlightStyleCache[text];
-        }
-      });
-
-      var highlight;
-      var displayFeatureInfo = function(pixel) {
-
-        var feature = map.forEachFeatureAtPixel(pixel, function(feature) {
-          return feature;
-        });
-
-        var info = document.getElementById('info');
-        if (feature) {
-          info.innerHTML = feature.getId() + ': ' + feature.get('name');
-        } else {
-          info.innerHTML = '&nbsp;';
-        }
-
-        if (feature !== highlight) {
-          if (highlight) {
-            featureOverlay.getSource().removeFeature(highlight);
-          }
-          if (feature) {
-            featureOverlay.getSource().addFeature(feature);
-          }
-          highlight = feature;
-        }
-
-      };
-
-      map.on('pointermove', function(evt) {
-        if (evt.dragging) {
-          return;
-        }
-        var pixel = map.getEventPixel(evt.originalEvent);
-        displayFeatureInfo(pixel);
-      });
-
-      map.on('click', function(evt) {
-        displayFeatureInfo(evt.pixel);
-      });
-      */
-
-      
-        
-
-      setTimeout(reflushMaiPage, 5000);
-
-      function reflushMaiPage(){
+      function updateFeaturesForVectorLayer(){
         $.ajax({
           type : "POST",
           url : 'http://localhost/ol-test/countries.geojson',
@@ -167,7 +76,7 @@
           }
           });
           
-          setTimeout(reflushMaiPage, 5000);
+          setTimeout(reflushMaiPage, refreshInteval);
         }
         
 
