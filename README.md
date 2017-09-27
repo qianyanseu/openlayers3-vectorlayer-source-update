@@ -1,6 +1,6 @@
 # openlayers3-vectorlayer-source-update
 
-Example on how to update features for a vector layer.
+Example on how to update features for a vector layer by Updating features of a vectory layer every 5 seconds.
 
 ## dependencies
 
